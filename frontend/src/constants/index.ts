@@ -1,0 +1,1 @@
+export const ENVOY_URL = "http://localhost:10000";
