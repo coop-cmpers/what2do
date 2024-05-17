@@ -3,12 +3,24 @@
 /* eslint-disable */
 // @ts-nocheck
 
+import { SearchRecommendationsRequest, SearchRecommendationsResponse } from "./recommendations_pb.js";
+import { MethodKind } from "@bufbuild/protobuf";
+
 /**
  * @generated from service what2do.v1.What2DoService
  */
 export const What2DoService = {
   typeName: "what2do.v1.What2DoService",
   methods: {
+    /**
+     * @generated from rpc what2do.v1.What2DoService.SearchRecommendations
+     */
+    searchRecommendations: {
+      name: "SearchRecommendations",
+      I: SearchRecommendationsRequest,
+      O: SearchRecommendationsResponse,
+      kind: MethodKind.Unary,
+    },
   }
 } as const;
 

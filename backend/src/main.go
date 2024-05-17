@@ -5,7 +5,10 @@ import (
 	"log"
 	"net"
 
+	"github.com/coop-cmpers/what2do-backend/src/endpoints"
+
 	pb "github.com/coop-cmpers/what2do-backend/protos-gen/helloworld/v1"
+	what2dopb "github.com/coop-cmpers/what2do-backend/protos-gen/what2do/v1"
 
 	"google.golang.org/grpc"
 )
@@ -28,6 +31,7 @@ func main() {
 
 	s := grpc.NewServer()
 	pb.RegisterHelloWorldServiceServer(s, &server{})
+	what2dopb.RegisterWhat2DoServiceServer(s, &endpoints.What2doServer{})
 
 	log.Printf("gRPC server listening at %v", listen.Addr())
 

@@ -1,0 +1,29 @@
+syntax = "proto3";
+option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
+package what2do.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum EventType {
+    EVENT_TYPE_UNSPECIFIED = 0;
+    EVENT_TYPE_RESTAURANT = 1;
+    EVENT_TYPE_ACTIVITY = 2;
+}
+
+message Recommendation {
+    int32 rank = 1;
+    // make address into the international standard as object
+    string address = 2;
+    string description = 3;
+}
+
+message SearchRecommendationsRequest {
+    google.protobuf.Timestamp event_time = 1;
+    string location = 2;
+    EventType event_type = 3;
+    string search_param = 4;
+}
+
+message SearchRecommendationsResponse {
+    repeated Recommendation recommendation = 1;
+}
