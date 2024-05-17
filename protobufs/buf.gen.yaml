@@ -1,0 +1,25 @@
+# Learn more: https://docs.buf.build/configuration/v1/buf-gen-yaml
+# npx buf generate protos
+version: v1
+plugins:
+  # Backend
+   - plugin: go
+     opt: paths=source_relative
+     out: ../backend/protos-gen
+   - plugin: buf.build/grpc/go:v1.3.0
+     opt: paths=source_relative
+     out: ../backend/protos-gen
+
+  # Frontend
+   - plugin: es
+     opt: target=js+dts
+     out: ../frontend/src/protos-gen
+   - plugin: connect-es
+     opt: target=ts
+     out: ../frontend/src/protos-gen
+
+  # Validator
+   - plugin: buf.build/bufbuild/validate-go
+     opt: paths=source_relative
+     out: ../backend/protos-gen
+   # Need frontend validator

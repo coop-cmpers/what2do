@@ -1,0 +1,82 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: what2do-frontend
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    networks:
+      - what2do-network
+
+  envoy:
+    image: envoyproxy/envoy:dev-4b0495bb6bf09f97292a8b30b2e97b71cda59256
+    container_name: what2do-envoy
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+    networks:
+      - what2do-network
+  
+  backend:
+    build: ./backend
+    container_name: what2do-backend
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+      - DATABASE_PORT=${DB_PORT}
+      - TEST_POSTGRES_USER=${TEST_DB_USER}
+      - TEST_POSTGRES_PASSWORD=${TEST_DB_PASSWORD}
+      - TEST_POSTGRES_DB=${TEST_DB_NAME}
+      - TEST_DATABASE_HOST=${TEST_DB_HOST}
+      - TEST_DATABASE_PORT=${TEST_DB_PORT}
+    tty: true
+    ports:
+      - 12345:12345
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - postgresdb
+    networks:
+      - what2do-network
+
+  postgresdb:
+    image: postgres:latest
+    container_name: what2do-postgresdb
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - 20000:5432
+    volumes:
+      - ./postgres/pg-data:/var/lib/postgresql/data
+    networks:
+      - what2do-network
+
+  postgresdb-test:
+    image: postgres:latest
+    container_name: what2do-postgresdb-test
+    environment:
+      - POSTGRES_USER=${TEST_DB_USER}
+      - POSTGRES_PASSWORD=${TEST_DB_PASSWORD}
+      - POSTGRES_DB=${TEST_DB_NAME}
+      - DATABASE_HOST=${TEST_DB_HOST}
+    ports:
+      - 20001:5432
+    volumes:
+      - ./postgres/pg-data-test:/var/lib/postgresql/data
+    networks:
+      - what2do-network
+
+volumes:
+  pg-data:
+  pg-data-test:
+
+networks:
+  what2do-network:
+    driver: bridge
