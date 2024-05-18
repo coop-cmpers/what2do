@@ -1,6 +1,6 @@
 syntax = "proto3";
 option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
-package what2do.v1;
+package helloworld.v1;
 
 import "google/protobuf/timestamp.proto";
 
@@ -11,8 +11,10 @@ message TestDBObject {
   google.protobuf.Timestamp random_datetime = 4;
 }
 
-message TestDBRequest {}
+message HelloDBRequest {
+  int32 id = 1;
+}
 
-message TestDBResponse {
+message HelloDBResponse {
   TestDBObject test_db_object = 1;
 }

@@ -3,5 +3,6 @@ package constants
 type ctxKey string
 
 const (
-	CtxEnv ctxKey = "ctx-env"
+	Store ctxKey = "store"
+	Env   ctxKey = "env"
 )

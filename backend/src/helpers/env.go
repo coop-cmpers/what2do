@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 	"strings"
@@ -35,6 +36,18 @@ func AddEnvToCtx(ctx context.Context) context.Context {
 		env = getEnvFromOS()
 	}
 
-	ctx = context.WithValue(ctx, constants.CtxEnv, env)
+	ctx = context.WithValue(ctx, constants.Env, env)
 	return ctx
+}
+
+func GetEnvFromCtx(ctx context.Context) (map[string]string, error) {
+	env := ctx.Value(constants.Env)
+
+	envMap, ok := env.(map[string]string)
+	if !ok {
+		log.Fatalf("Failed to cast environment variables in context to map")
+		return nil, errors.New("failed to cast environment variables in context to map")
+	}
+
+	return envMap, nil
 }

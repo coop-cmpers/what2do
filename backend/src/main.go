@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"log"
 	"net"
 
@@ -10,34 +9,51 @@ import (
 	"github.com/coop-cmpers/what2do-backend/src/helpers"
 	"github.com/coop-cmpers/what2do-backend/src/store"
 
-	helloWorldpb "github.com/coop-cmpers/what2do-backend/protos-gen/helloworld/v1"
+	helloworldpb "github.com/coop-cmpers/what2do-backend/protos-gen/helloworld/v1"
 	what2dopb "github.com/coop-cmpers/what2do-backend/protos-gen/what2do/v1"
 
+	_ "github.com/lib/pq" // postgres driver
 	"google.golang.org/grpc"
 )
 
-var db *sql.DB
-
 func main() {
-	port := "12345"
+	// Inject environment variables into the context
+	ctx := context.Background()
+	ctx = helpers.AddEnvToCtx(ctx)
 
+	// Initialise connection to the database
+	store := &store.Store{}
+	_, err := store.Connect(ctx)
+	if err != nil {
+		return
+	}
+
+	// Initialise the gRPC server
+	s := grpc.NewServer(
+		grpc.ChainStreamInterceptor(
+			helpers.DBStreamServerInterceptor(store),
+		),
+		grpc.ChainUnaryInterceptor(
+			helpers.DBUnaryServerInterceptor(store),
+		),
+	)
+
+	// Register the gRPC services
+	helloworldpb.RegisterHelloWorldServiceServer(s, &endpoints.HelloWorldServer{})
+	what2dopb.RegisterWhat2DoServiceServer(s, &endpoints.What2doServer{})
+
+	// Listen and serve on port
+	env, err := helpers.GetEnvFromCtx(ctx)
+	if err != nil {
+		return
+	}
+
+	port := env["BACKEND_PORT"]
 	listen, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Fatalf("Failed to listen on port %s - err: %v", port, err)
 		return
 	}
-
-	ctx := context.Background()
-	ctx = helpers.AddEnvToCtx(ctx)
-
-	db, err = store.Connect(ctx)
-	if err != nil {
-		return
-	}
-
-	s := grpc.NewServer()
-	helloWorldpb.RegisterHelloWorldServiceServer(s, &endpoints.HelloWorldServer{})
-	what2dopb.RegisterWhat2DoServiceServer(s, &endpoints.What2doServer{})
 
 	log.Printf("gRPC server listening at %v", listen.Addr())
 

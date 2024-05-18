@@ -3,6 +3,7 @@
 
 # Monorepo-wide configs
 .env
+.env.override
 
 # Frontend configs
 /frontend/node_modules

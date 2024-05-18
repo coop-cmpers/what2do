@@ -25,5 +25,5 @@ message SearchRecommendationsRequest {
 }
 
 message SearchRecommendationsResponse {
-    repeated Recommendation recommendation = 1;
+    repeated Recommendation recommendations = 1;
 }
