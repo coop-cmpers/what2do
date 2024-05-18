@@ -1,7 +1,22 @@
-/frontend/node_modules
+# This forgets all global gitignore configs
+!*
+
+# Monorepo-wide configs
 .env
-/postgres/pg-data/
-/postgres/pg-data-test/
+.env.override
+
+# Frontend configs
+/frontend/node_modules
+/frontend/src/protos-gen/
+
+#Backend configs
+/backend/protos-gen/
+
+# Protobufs configs
 /protobufs/node_modules
 /protobufs/package-lock.json
 /protobufs/package.json
+
+# Postgres configs
+# /postgres/pg-data/
+# /postgres/pg-data-test/
