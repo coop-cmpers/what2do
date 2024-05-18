@@ -18,5 +18,5 @@
 /protobufs/package.json
 
 # Postgres configs
-# /postgres/pg-data/
-# /postgres/pg-data-test/
+/postgres/pg-data/
+/postgres/pg-data-test/
