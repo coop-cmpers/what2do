@@ -1,20 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DateButton from "../components/date_button";
-import { Grid, Stack, ThemeProvider, Typography, useTheme } from "@mui/material";
+import { Grid, ThemeProvider, Typography, useTheme } from "@mui/material";
 import { theme } from "../helpers/theme";
 import TimeButton from "../components/time_button";
 import CuisinePicker from "../components/cuisine";
 import LocationPicker from "../components/location";
-import { helloWorld } from "../clients/hello-world";
-import { searchRecommendations } from "../clients/recommendations";
-
 
 
 const Home = () => {
-    useEffect(() => {
-    helloWorld().then((resp) => console.log(resp.message));
-    searchRecommendations().then((resp) => console.log(resp));
-  }, []);
+
   return (
     <ThemeProvider theme={(theme)}>
       
