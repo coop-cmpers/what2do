@@ -22,6 +22,7 @@ services:
     build: ./backend
     container_name: what2do-backend
     environment:
+      - MODE=${MODE}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
@@ -40,6 +41,7 @@ services:
       - .:/app
     depends_on:
       - postgresdb
+      - postgresdb-test
     networks:
       - what2do-network
 

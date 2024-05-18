@@ -2,9 +2,11 @@ syntax = "proto3";
 option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
 package what2do.v1;
 
+import "what2do/v1/test-db.proto";
 import "what2do/v1/recommendations.proto";
 
 service What2DoService {
+  rpc TestDB(TestDBRequest) returns (TestDBResponse) {}
   rpc SearchRecommendations(SearchRecommendationsRequest) returns (SearchRecommendationsResponse) {}
 }
 

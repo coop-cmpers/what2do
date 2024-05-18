@@ -6,6 +6,10 @@
 
 # Frontend configs
 /frontend/node_modules
+/frontend/src/protos-gen/
+
+#Backend configs
+/backend/protos-gen/
 
 # Protobufs configs
 /protobufs/node_modules
