@@ -65,7 +65,20 @@ services:
       - ${DEV_TEST_DB_PORT}:${PROD_TEST_DB_PORT}
     volumes:
       - ./postgres/pg-data-test:/var/lib/postgresql/data
-      - ./postgres/pg-schema-test/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - what2do-network
+
+  migrate:
+    build: ./migrate
+    container_name: what2do-migrate
+    env_file:
+      - path: ./.env
+        required: true
+    volumes:
+      - ./migrate/migrations:/migrations
+    depends_on:
+      - postgresdb
+      - postgresdb-test
     networks:
       - what2do-network
 

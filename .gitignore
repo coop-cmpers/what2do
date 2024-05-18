@@ -17,6 +17,6 @@
 /protobufs/package-lock.json
 /protobufs/package.json
 
-# Postgres configs
-/postgres/pg-data/
-/postgres/pg-data-test/
+# Postgres volume
+/postgres/pg-data/*
+/postgres/pg-data-test/*

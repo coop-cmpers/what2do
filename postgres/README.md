@@ -3,4 +3,4 @@
 
 Production and test databases for the What2do service.
 
-Export ONLY the schema using PGAdmin into the `pg-schema` or `pg-schema-test` folder.
+This directory is intentionally hollow - it just holds the Docker volumes for the Postgres servers
