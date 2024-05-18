@@ -1,2 +1,7 @@
 /frontend/node_modules
 .env
+/postgres/pg-data/
+/postgres/pg-data-test/
+/protobufs/node_modules
+/protobufs/package-lock.json
+/protobufs/package.json
