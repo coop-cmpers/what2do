@@ -70,6 +70,7 @@ services:
       - 20001:5432
     volumes:
       - ./postgres/pg-data-test:/var/lib/postgresql/data
+      - ./postgres/pg-schema-test/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - what2do-network
 
