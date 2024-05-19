@@ -8,10 +8,13 @@ WORKDIR /app
 COPY . .
 #COPY .env .
 
+RUN chmod +x ./docker-entrypoint.sh ./wait-for-it.sh
+
 RUN go get -d -v ./...
 RUN go install -v ./...
 RUN go build -o /build ./src/main.go
 
-EXPOSE 12345
+EXPOSE ${BACKEND_PORT}
 
-CMD [ "/build" ]
+ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["/build"]

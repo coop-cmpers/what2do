@@ -1,0 +1,20 @@
+syntax = "proto3";
+option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
+package helloworld.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message TestDBObject {
+  int32 id = 1;
+  string random_string = 2;
+  int64 random_integer = 3;
+  google.protobuf.Timestamp random_datetime = 4;
+}
+
+message HelloDBRequest {
+  int32 id = 1;
+}
+
+message HelloDBResponse {
+  TestDBObject test_db_object = 1;
+}

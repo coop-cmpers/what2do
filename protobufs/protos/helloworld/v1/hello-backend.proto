@@ -1,0 +1,9 @@
+syntax = "proto3";
+option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
+package helloworld.v1;
+
+message HelloBackendRequest {}
+
+message HelloBackendResponse {
+  string message = 1;
+}
