@@ -2,7 +2,6 @@ package endpoints
 
 import (
 	"context"
-	"log"
 
 	pb "github.com/coop-cmpers/what2do-backend/protos-gen/what2do/v1"
 	"github.com/coop-cmpers/what2do-backend/src/helpers"
@@ -12,15 +11,10 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (s *What2doServer) CreateEvent(ctx context.Context, req *pb.CreateEventRequest) (*pb.CreateEventResponse, error) {
+func (s *What2doService) CreateEvent(ctx context.Context, req *pb.CreateEventRequest) (*pb.CreateEventResponse, error) {
 	if len(req.EventName) == 0 || !req.StartTime.IsValid() || !req.EndTime.IsValid() || len(req.Location) == 0 {
-		log.Printf("CreateEvent: empty or invalid argument")
+		s.logger.Errorf("CreateEvent: empty or invalid argument")
 		return nil, status.Errorf(codes.InvalidArgument, "CreateEvent: empty or invalid argument")
-	}
-
-	db, err := GetStore(ctx)
-	if err != nil {
-		return nil, err
 	}
 
 	eventID := helpers.GenerateUUID()
@@ -32,7 +26,7 @@ func (s *What2doServer) CreateEvent(ctx context.Context, req *pb.CreateEventRequ
 		Location:  req.Location,
 	}
 
-	err = db.CreateEvent(ctx, event)
+	err := s.store.CreateEvent(ctx, event)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "CreateEvent: failed database transaction")
 	}
@@ -40,18 +34,13 @@ func (s *What2doServer) CreateEvent(ctx context.Context, req *pb.CreateEventRequ
 	return &pb.CreateEventResponse{Id: eventID.String()}, nil
 }
 
-func (s *What2doServer) GetEvent(ctx context.Context, req *pb.GetEventRequest) (*pb.GetEventResponse, error) {
+func (s *What2doService) GetEvent(ctx context.Context, req *pb.GetEventRequest) (*pb.GetEventResponse, error) {
 	if len(req.Id) == 0 {
-		log.Printf("GetEvent: empty or invalid argument")
+		s.logger.Errorf("GetEvent: empty or invalid argument")
 		return nil, status.Errorf(codes.InvalidArgument, "GetEvent: empty or invalid argument")
 	}
 
-	db, err := GetStore(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	event, err := db.GetEvent(ctx, req.Id)
+	event, err := s.store.GetEvent(ctx, req.Id)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "GetEvent: failed to get event from database")
 	}

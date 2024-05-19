@@ -6,13 +6,8 @@ import (
 	pb "github.com/coop-cmpers/what2do-backend/protos-gen/helloworld/v1"
 )
 
-func (s *HelloWorldServer) HelloDB(ctx context.Context, req *pb.HelloDBRequest) (*pb.HelloDBResponse, error) {
-	db, err := GetStore(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	testDBObject, err := db.HelloDB(ctx, req.GetId())
+func (s *HelloWorldService) HelloDB(ctx context.Context, req *pb.HelloDBRequest) (*pb.HelloDBResponse, error) {
+	testDBObject, err := s.store.HelloDB(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}

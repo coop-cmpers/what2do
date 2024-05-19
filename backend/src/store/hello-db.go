@@ -3,7 +3,6 @@ package store
 import (
 	"context"
 	"database/sql"
-	"log"
 	"time"
 
 	pb "github.com/coop-cmpers/what2do-backend/protos-gen/helloworld/v1"
@@ -26,7 +25,7 @@ func (s *Store) HelloDB(ctx context.Context, id int32) (*pb.TestDBObject, error)
 		return &pb.TestDBObject{}, nil
 	}
 	if err != nil {
-		log.Printf("Failed to query test_table with id %d - err: %v", id, err)
+		s.logger.Errorf("Failed to query test_table with id %d - err: %v", id, err)
 		return nil, err
 	}
 

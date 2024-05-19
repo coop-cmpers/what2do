@@ -2,7 +2,6 @@ package store
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -24,7 +23,7 @@ func (s *Store) CreateEvent(ctx context.Context, event *Event) error {
 
 	_, err := s.db.Exec(stmt, event.ID, event.Name, event.StartTime, event.EndTime, event.Location)
 	if err != nil {
-		log.Printf("Failed to insert event into the database - values: %+v, err: %v", event, err)
+		s.logger.Errorf("Failed to insert event into the database - values: %+v, err: %v", event, err)
 		return err
 	}
 
@@ -41,14 +40,14 @@ func (s *Store) GetEvent(ctx context.Context, eventID string) (*Event, error) {
 	var event []Event
 	err := s.db.SelectContext(ctx, &event, stmt, eventID)
 	if err != nil {
-		log.Printf("Failed to query event table with id %s - err: %v", eventID, err)
+		s.logger.Errorf("Failed to query event table with id %s - err: %v", eventID, err)
 		return nil, err
 	}
 	if len(event) == 0 {
 		return nil, nil
 	}
 	if len(event) > 1 {
-		log.Printf("[WARN] There was an unexpected number of events returned from the event table - len: %d", len(event))
+		s.logger.Warnf("There was an unexpected number of events returned from the event table - len: %d", len(event))
 	}
 
 	return &event[0], nil

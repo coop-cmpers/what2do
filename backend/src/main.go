@@ -26,44 +26,52 @@ func main() {
 	ctx := context.Background()
 	ctx = helpers.AddEnvToCtx(ctx)
 
-	// Initialise connection to the database
-	store := &store.Store{}
-	_, err := store.Connect(ctx)
+	// Initialise database store
+	store, err := store.NewStore(ctx)
 	if err != nil {
-		log.Fatalf("Failed to initialise databsae connection")
+		log.Fatalf("Failed to initialise store")
 	}
 
 	// Initialise Zap logger
-	zapLogger, err := zap.NewProduction()
+	logger, err := zap.NewProduction()
 	if err != nil {
-		log.Fatalf("Failed to initialise Zap logger")
+		log.Fatalf("Failed to initialise gRPC Zap logger - err: %v", err)
 	}
-	defer zapLogger.Sync()
+	defer logger.Sync()
 
 	zapOpts := []grpc_zap.Option{
 		grpc_zap.WithLevels(helpers.ZapCodeToLevel),
 	}
-	grpc_zap.ReplaceGrpcLoggerV2(zapLogger)
+	grpc_zap.ReplaceGrpcLoggerV2(logger)
 
 	// Initialise the gRPC server
 	s := grpc.NewServer(
 		grpc.ChainStreamInterceptor(
 			helpers.DBStreamServerInterceptor(store),
 			grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
-			grpc_zap.StreamServerInterceptor(zapLogger, zapOpts...),
+			grpc_zap.StreamServerInterceptor(logger, zapOpts...),
 			grpc_recovery.StreamServerInterceptor(), // TODO: implement graceful panic recovery
 		),
 		grpc.ChainUnaryInterceptor(
 			helpers.DBUnaryServerInterceptor(store),
 			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
-			grpc_zap.UnaryServerInterceptor(zapLogger, zapOpts...),
+			grpc_zap.UnaryServerInterceptor(logger, zapOpts...),
 			grpc_recovery.UnaryServerInterceptor(),
 		),
 	)
 
-	// Register the gRPC services
-	helloworldpb.RegisterHelloWorldServiceServer(s, &endpoints.HelloWorldServer{})
-	what2dopb.RegisterWhat2DoServiceServer(s, &endpoints.What2doServer{})
+	// Create and register the gRPC services
+	helloWorldService, err := endpoints.NewHelloWorldService(ctx, store, logger)
+	if err != nil {
+		log.Fatalf("Failed to create new HelloWorldService - err: %v", err)
+	}
+	what2doService, err := endpoints.NewWhat2doService(ctx, store, logger)
+	if err != nil {
+		log.Fatalf("Failed to create new What2doService - err: %v", err)
+	}
+
+	helloworldpb.RegisterHelloWorldServiceServer(s, helloWorldService)
+	what2dopb.RegisterWhat2DoServiceServer(s, what2doService)
 
 	// Listen and serve on port
 	env, err := helpers.GetEnvFromCtx(ctx)
