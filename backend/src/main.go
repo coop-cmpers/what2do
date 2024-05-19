@@ -47,13 +47,13 @@ func main() {
 	// Initialise the gRPC server
 	s := grpc.NewServer(
 		grpc.ChainStreamInterceptor(
-			helpers.DBStreamServerInterceptor(store),
+			helpers.CustomStreamServerInterceptor(),
 			grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
 			grpc_zap.StreamServerInterceptor(logger, zapOpts...),
 			grpc_recovery.StreamServerInterceptor(), // TODO: implement graceful panic recovery
 		),
 		grpc.ChainUnaryInterceptor(
-			helpers.DBUnaryServerInterceptor(store),
+			helpers.CustomUnaryServerInterceptor(),
 			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
 			grpc_zap.UnaryServerInterceptor(logger, zapOpts...),
 			grpc_recovery.UnaryServerInterceptor(),
