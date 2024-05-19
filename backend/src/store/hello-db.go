@@ -11,10 +11,10 @@ import (
 )
 
 type HelloRow struct {
-	ID             int32
-	RandomString   string
-	RandomInteger  int64
-	RandomDatetime time.Time
+	ID             int32     `db:"id"`
+	RandomString   string    `db:"random_string"`
+	RandomInteger  int64     `db:"random_integer"`
+	RandomDatetime time.Time `db:"random_datetime"`
 }
 
 func (s *Store) HelloDB(ctx context.Context, id int32) (*pb.TestDBObject, error) {
@@ -26,7 +26,7 @@ func (s *Store) HelloDB(ctx context.Context, id int32) (*pb.TestDBObject, error)
 		return &pb.TestDBObject{}, nil
 	}
 	if err != nil {
-		log.Fatalf("Failed to query test_table with id %d - err: %v", id, err)
+		log.Printf("Failed to query test_table with id %d - err: %v", id, err)
 		return nil, err
 	}
 

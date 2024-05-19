@@ -45,7 +45,7 @@ func GetEnvFromCtx(ctx context.Context) (map[string]string, error) {
 
 	envMap, ok := env.(map[string]string)
 	if !ok {
-		log.Fatalf("Failed to cast environment variables in context to map")
+		log.Printf("Failed to cast environment variables in context to map")
 		return nil, errors.New("failed to cast environment variables in context to map")
 	}
 

@@ -7,12 +7,12 @@ import (
 )
 
 func (s *HelloWorldServer) HelloDB(ctx context.Context, req *pb.HelloDBRequest) (*pb.HelloDBResponse, error) {
-	store, err := GetStore(ctx)
+	db, err := GetStore(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	testDBObject, err := store.HelloDB(ctx, req.GetId())
+	testDBObject, err := db.HelloDB(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}

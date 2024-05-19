@@ -3,7 +3,7 @@
 {
   "protoc": {
     "options": [
-      "--proto_path=./protobufs/protos"
+      "--proto_path=/protobufs/protos/"
     ]
   }
 }
