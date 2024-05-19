@@ -9,6 +9,8 @@ import (
 	"google.golang.org/grpc"
 )
 
+// Injects the database connection into the context
+
 func DBUnaryServerInterceptor(store *store.Store) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		return handler(context.WithValue(ctx, constants.Store, store), req)
