@@ -36,16 +36,31 @@ export declare class Recommendation extends Message<Recommendation> {
   rank: number;
 
   /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
    * make address into the international standard as object
    *
-   * @generated from field: string address = 2;
+   * @generated from field: string address = 3;
    */
   address: string;
 
   /**
-   * @generated from field: string description = 3;
+   * @generated from field: string PriceLevel = 4;
    */
-  description: string;
+  PriceLevel: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp Open = 5;
+   */
+  Open?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp Close = 6;
+   */
+  Close?: Timestamp;
 
   constructor(data?: PartialMessage<Recommendation>);
 
@@ -106,9 +121,9 @@ export declare class SearchRecommendationsRequest extends Message<SearchRecommen
  */
 export declare class SearchRecommendationsResponse extends Message<SearchRecommendationsResponse> {
   /**
-   * @generated from field: repeated what2do.v1.Recommendation recommendation = 1;
+   * @generated from field: repeated what2do.v1.Recommendation recommendations = 1;
    */
-  recommendation: Recommendation[];
+  recommendations: Recommendation[];
 
   constructor(data?: PartialMessage<SearchRecommendationsResponse>);
 

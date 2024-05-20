@@ -1,7 +1,7 @@
 import { helloWorldClient } from ".";
-import { HelloWorldRequest } from "../protos-gen/helloworld/v1/helloworld_pb"
+import { HelloBackendRequest } from "../protos-gen/helloworld/v1/hello-backend_pb";
 
-export const helloWorld = () => {
-    const req = new HelloWorldRequest();
-    return helloWorldClient.helloWorld(req);
+export const helloBackend = () => {
+    const req = new HelloBackendRequest();
+    return helloWorldClient.helloBackend(req);
 }

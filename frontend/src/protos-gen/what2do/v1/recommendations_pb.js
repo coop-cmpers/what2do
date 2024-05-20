@@ -24,8 +24,11 @@ export const Recommendation = /*@__PURE__*/ proto3.makeMessageType(
   "what2do.v1.Recommendation",
   () => [
     { no: 1, name: "rank", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 2, name: "address", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "address", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "PriceLevel", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "Open", kind: "message", T: Timestamp },
+    { no: 6, name: "Close", kind: "message", T: Timestamp },
   ],
 );
 
@@ -48,7 +51,7 @@ export const SearchRecommendationsRequest = /*@__PURE__*/ proto3.makeMessageType
 export const SearchRecommendationsResponse = /*@__PURE__*/ proto3.makeMessageType(
   "what2do.v1.SearchRecommendationsResponse",
   () => [
-    { no: 1, name: "recommendation", kind: "message", T: Recommendation, repeated: true },
+    { no: 1, name: "recommendations", kind: "message", T: Recommendation, repeated: true },
   ],
 );
 

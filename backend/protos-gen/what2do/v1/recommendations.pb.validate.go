@@ -59,9 +59,69 @@ func (m *Recommendation) validate(all bool) error {
 
 	// no validation rules for Rank
 
+	// no validation rules for Name
+
 	// no validation rules for Address
 
-	// no validation rules for Description
+	// no validation rules for PriceLevel
+
+	if all {
+		switch v := interface{}(m.GetOpen()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RecommendationValidationError{
+					field:  "Open",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RecommendationValidationError{
+					field:  "Open",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOpen()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RecommendationValidationError{
+				field:  "Open",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetClose()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, RecommendationValidationError{
+					field:  "Close",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, RecommendationValidationError{
+					field:  "Close",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetClose()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RecommendationValidationError{
+				field:  "Close",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return RecommendationMultiError(errors)
@@ -301,7 +361,7 @@ func (m *SearchRecommendationsResponse) validate(all bool) error {
 
 	var errors []error
 
-	for idx, item := range m.GetRecommendation() {
+	for idx, item := range m.GetRecommendations() {
 		_, _ = idx, item
 
 		if all {
@@ -309,7 +369,7 @@ func (m *SearchRecommendationsResponse) validate(all bool) error {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
 					errors = append(errors, SearchRecommendationsResponseValidationError{
-						field:  fmt.Sprintf("Recommendation[%v]", idx),
+						field:  fmt.Sprintf("Recommendations[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -317,7 +377,7 @@ func (m *SearchRecommendationsResponse) validate(all bool) error {
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
 					errors = append(errors, SearchRecommendationsResponseValidationError{
-						field:  fmt.Sprintf("Recommendation[%v]", idx),
+						field:  fmt.Sprintf("Recommendations[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
 					})
@@ -326,7 +386,7 @@ func (m *SearchRecommendationsResponse) validate(all bool) error {
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return SearchRecommendationsResponseValidationError{
-					field:  fmt.Sprintf("Recommendation[%v]", idx),
+					field:  fmt.Sprintf("Recommendations[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
