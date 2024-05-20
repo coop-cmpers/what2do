@@ -3,8 +3,10 @@ option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
 package what2do.v1;
 
 import "what2do/v1/recommendations.proto";
+import "what2do/v1/event.proto";
 
 service What2DoService {
   rpc SearchRecommendations(SearchRecommendationsRequest) returns (SearchRecommendationsResponse) {}
+  rpc CreateEvent(CreateEventRequest) returns (CreateEventResponse) {}
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse) {}
 }
-

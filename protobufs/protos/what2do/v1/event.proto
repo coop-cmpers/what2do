@@ -1,0 +1,69 @@
+syntax = "proto3";
+option go_package = "github.com/coop-cmpers/what2do-protobufs-go";
+package what2do.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// The metadata for an event
+message EventMetadata {
+  // The display name of the organiser
+  string organiser_name = 1;
+}
+
+// The event object
+message Event {
+  // The UUID of the event
+  string id = 1;
+  // The metadata of the event
+  EventMetadata metadata = 2;
+  // The display name of the event
+  string event_name = 3;
+  // TODO: define limits for time range (e.g. min / max / default value / max range size)
+  // The start time of the event
+  google.protobuf.Timestamp start_time = 4;
+  // The end time of the event
+  google.protobuf.Timestamp end_time = 5;
+  // The location of the event (string?)
+  string location = 6;
+
+
+
+  // Tags for the event (e.g. birthday, team-building)
+  // repeated string tags = 8;
+  // The total budget for the event (currently just in cents)
+  // int32 cents = 9;
+  // The password to the event (plaintext???)
+  // string password = 10;
+  // The attendees of the event (email?)
+  // repeated string attendees = 11;
+  // Things to bring?
+}
+
+// The request to `CreateEvent`
+message CreateEventRequest {
+  // Required. The display name of the event
+  string event_name = 1;
+  // Required. The start time of the event
+  google.protobuf.Timestamp start_time = 2;
+  // Required. The end time of the event
+  google.protobuf.Timestamp end_time = 3;
+  // Required. The location of the event
+  string location = 4;
+}
+
+// The response to `CreateEvent`
+message CreateEventResponse {
+  // The UUID of the created event
+  string id = 1;
+  // // The access code of the created event
+  // string access_code = 2;
+}
+
+message GetEventRequest {
+  // Required. The UUID of the event
+  string id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
