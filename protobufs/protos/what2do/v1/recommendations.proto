@@ -12,9 +12,12 @@ enum EventType {
 
 message Recommendation {
     int32 rank = 1;
+    string name = 2;
     // make address into the international standard as object
-    string address = 2;
-    string description = 3;
+    string address = 3;
+    string PriceLevel = 4;
+    google.protobuf.Timestamp Open = 5;
+    google.protobuf.Timestamp Close = 6;
 }
 
 message SearchRecommendationsRequest {
