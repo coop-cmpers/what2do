@@ -22,7 +22,6 @@ func getEnvFromOS() map[string]string {
 			envMap[envKey] = envValue
 		}
 	}
-
 	return envMap
 }
 
@@ -42,7 +41,6 @@ func AddEnvToCtx(ctx context.Context) context.Context {
 
 func GetEnvFromCtx(ctx context.Context) (map[string]string, error) {
 	env := ctx.Value(constants.Env)
-
 	envMap, ok := env.(map[string]string)
 	if !ok {
 		return nil, errors.New("failed to cast environment variables in context to map")
