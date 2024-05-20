@@ -4,6 +4,7 @@
 # Monorepo-wide configs
 .env
 .env.override
+.vscode
 
 # Frontend configs
 /frontend/node_modules

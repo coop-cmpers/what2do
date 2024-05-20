@@ -1,9 +1,7 @@
-// Attempted solve for protobuf import error
-
 {
   "protoc": {
     "options": [
-      "--proto_path=./protobufs/protos"
+      "--proto_path=/protobufs/protos/"
     ]
   }
 }
