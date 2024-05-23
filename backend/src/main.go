@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/coop-cmpers/what2do-backend/src/clients"
 	"github.com/coop-cmpers/what2do-backend/src/endpoints"
 	"github.com/coop-cmpers/what2do-backend/src/helpers"
 	"github.com/coop-cmpers/what2do-backend/src/store"
@@ -25,6 +26,11 @@ func main() {
 	// Inject environment variables into the context
 	ctx := context.Background()
 	ctx = helpers.AddEnvToCtx(ctx)
+
+	env, err := helpers.GetEnvFromCtx(ctx)
+	if err != nil {
+		log.Fatalf("Failed to find environment variables")
+	}
 
 	// Initialise database store
 	store, err := store.NewStore(ctx)
@@ -60,25 +66,22 @@ func main() {
 		),
 	)
 
-	// Create and register the gRPC services
-	helloWorldService, err := endpoints.NewHelloWorldService(ctx, store, logger)
-	if err != nil {
-		log.Fatalf("Failed to create new HelloWorldService - err: %v", err)
-	}
-	what2doService, err := endpoints.NewWhat2doService(ctx, store, logger)
-	if err != nil {
-		log.Fatalf("Failed to create new What2doService - err: %v", err)
-	}
+	// Initialise the clients
+	client := clients.NewClient(ctx, &clients.ClientConfig{
+		Logger:              logger,
+		GooglePlacesAPIKey:  env["GOOGLE_PLACES_API_KEY"],
+		GooglePlacesBaseURL: env["GOOGLE_PLACES_API_URL"],
+	})
 
+	// Initialise the services
+	helloWorldService := endpoints.NewHelloWorldService(ctx, store, logger)
+	what2doService := endpoints.NewWhat2doService(ctx, store, client, logger)
+
+	// Register the gRPC services
 	helloworldpb.RegisterHelloWorldServiceServer(s, helloWorldService)
 	what2dopb.RegisterWhat2DoServiceServer(s, what2doService)
 
 	// Listen and serve on port
-	env, err := helpers.GetEnvFromCtx(ctx)
-	if err != nil {
-		log.Fatalf("Failed to find environment variables")
-	}
-
 	port := env["BACKEND_PORT"]
 	listen, err := net.Listen("tcp", ":"+port)
 	if err != nil {
