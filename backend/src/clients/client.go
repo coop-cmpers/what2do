@@ -24,7 +24,8 @@ func NewClient(ctx context.Context, config *ClientConfig) *Client {
 	}
 }
 
-type GoogleMapsClient interface {
+// Any new functions that should be exposed must be added to this interface
+type GooglePlacesClient interface {
 	FetchPlacesFromPlacesAPI(ctx context.Context, searchType string, location string, eventTime *timestamppb.Timestamp) ([]*pb.Recommendation, error)
 }
 
